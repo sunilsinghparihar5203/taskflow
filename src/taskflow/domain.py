@@ -1,4 +1,4 @@
-from dataclasses import dataclass
+from dataclasses import dataclass, field
 from datetime import date
 from typing import Literal, Optional, cast
 
@@ -15,6 +15,7 @@ class Task:
     title: str
     state: TaskState
     due_date: Optional[date] = None
+    labels: list[str] = field(default_factory=list)
 
     def __post_init__(self) -> None:
         if not self.title.strip():

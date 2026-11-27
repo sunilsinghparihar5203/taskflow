@@ -21,3 +21,14 @@ summarize_tasks_by_status(tasks)
 
 Zero-count states are included so consumers such as dashboards can render a
 consistent set of statuses even when no task currently has a particular state.
+
+Each task gets its own labels list by default:
+
+```python
+first = Task(id="task-4", title="Fix bug", state="todo")
+second = Task(id="task-5", title="Update docs", state="todo")
+
+first.labels.append("urgent")
+print(first.labels)   # ["urgent"]
+print(second.labels)  # []
+```

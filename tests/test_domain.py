@@ -11,6 +11,15 @@ class TaskTests(unittest.TestCase):
         self.assertEqual(task.title, "Write tests")
         self.assertEqual(task.state, "todo")
 
+    def test_tasks_have_independent_default_labels(self) -> None:
+        first = Task(id="task-1", title="Write tests", state="todo")
+        second = Task(id="task-2", title="Review changes", state="todo")
+
+        first.labels.append("urgent")
+
+        self.assertEqual(first.labels, ["urgent"])
+        self.assertEqual(second.labels, [])
+
     def test_blank_or_whitespace_title_is_rejected(self) -> None:
         for title in ("", " \t\n "):
             with self.subTest(title=title):
