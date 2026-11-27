@@ -4,7 +4,7 @@ from typing import Literal, Optional, cast
 
 
 TaskState = Literal["todo", "in_progress", "done"]
-_TASK_STATES = ("todo", "in_progress", "done")
+_TASK_STATES: tuple[TaskState, ...] = ("todo", "in_progress", "done")
 
 
 @dataclass
@@ -27,6 +27,14 @@ class Task:
         if state not in _TASK_STATES:
             raise ValueError(f"unsupported task state: {state!r}")
         self.state = state
+
+
+def summarize_tasks_by_status(tasks: list[Task]) -> dict[TaskState, int]:
+    """Count tasks in each supported state, including states with no tasks."""
+    counts = {state: 0 for state in _TASK_STATES}
+    for task in tasks:
+        counts[task.state] += 1
+    return counts
 
 
 def parse_task(data: dict[str, object]) -> Task:

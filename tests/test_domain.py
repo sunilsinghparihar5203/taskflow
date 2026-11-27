@@ -1,7 +1,7 @@
 import unittest
 from datetime import date
 
-from taskflow.domain import Task, parse_task
+from taskflow.domain import Task, parse_task, summarize_tasks_by_status
 
 
 class TaskTests(unittest.TestCase):
@@ -16,6 +16,24 @@ class TaskTests(unittest.TestCase):
             with self.subTest(title=title):
                 with self.assertRaises(ValueError):
                     Task(id="task-1", title=title, state="todo")
+
+    def test_summarize_empty_tasks_includes_every_state(self) -> None:
+        self.assertEqual(
+            summarize_tasks_by_status([]),
+            {"todo": 0, "in_progress": 0, "done": 0},
+        )
+
+    def test_summarize_mixed_tasks_includes_zero_counts(self) -> None:
+        tasks = [
+            Task(id="task-1", title="Write tests", state="todo"),
+            Task(id="task-2", title="Review changes", state="todo"),
+            Task(id="task-3", title="Ship release", state="done"),
+        ]
+
+        self.assertEqual(
+            summarize_tasks_by_status(tasks),
+            {"todo": 2, "in_progress": 0, "done": 1},
+        )
 
     def test_valid_state_change(self) -> None:
         task = Task(id="task-1", title="Write tests", state="todo")
